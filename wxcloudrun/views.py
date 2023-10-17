@@ -14,6 +14,22 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/wechat', methods=['GET', 'POST'])
+def wechat():
+    if request.method == 'GET':
+        # 这里处理 GET 请求
+        # 如果微信公众号有发送验证请求，可以在这里处理
+        # 否则，您可以根据需要自定义处理
+        return "GET request received"
+
+    elif request.method == 'POST':
+        # 处理微信服务器的消息推送请求
+        xml_data = request.data  # 获取 POST 请求的 XML 数据
+        # 解析 xml_data 并根据消息类型或事件进行响应
+        # ...
+        return "success"  # 对微信服务器返回 "success" 或其他必要的响应
+
+
 @app.route('/api/count', methods=['POST'])
 def count():
     """
