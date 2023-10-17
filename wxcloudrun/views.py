@@ -1,5 +1,6 @@
+import time
 from datetime import datetime
-from flask import render_template, request
+from flask import render_template, request, jsonify
 from run import app
 from wxcloudrun.dao import delete_counterbyid, query_counterbyid, insert_counter, update_counterbyid
 from wxcloudrun.model import Counters
@@ -24,10 +25,23 @@ def wechat():
 
     elif request.method == 'POST':
         # 处理微信服务器的消息推送请求
-        xml_data = request.data  # 获取 POST 请求的 XML 数据
-        # 解析 xml_data 并根据消息类型或事件进行响应
-        # ...
-        return "success"  # 对微信服务器返回 "success" 或其他必要的响应
+        # 获取JSON数据
+        json_data = request.get_json()
+
+        # 提取所需字段
+        to_user_name = json_data.get('ToUserName')
+        from_user_name = json_data.get('FromUserName')
+
+        # 构建响应消息
+        response_data = {
+            "ToUserName": from_user_name,  # 注意这里交换了ToUserName和FromUserName的值
+            "FromUserName": to_user_name,
+            "CreateTime": int(time.time()),
+            "MsgType": "text",
+            "Content": "ok"
+        }
+
+        return jsonify(response_data)
 
 
 @app.route('/api/count', methods=['POST'])
